@@ -4,45 +4,50 @@ import 'stat.dart';
 
 class Pet {
   PetStats petStats;
-  bool isSleeping;
   bool hasPooped;
-  //Grid gridDisplay;
+  bool petIsSick;
 
   Pet() {
     petStats = PetStats();
-    isSleeping = false;
     hasPooped = false;
   }
 
-  Pet.fromMemory(this.petStats, this.isSleeping, this.hasPooped);
+  Pet.fromJson(Map<String, dynamic> json)
+    : petStats = PetStats.fromJson(json['petStats']),
+      hasPooped = json['hasPooped'],
+      petIsSick = json['petIsSick'];
+
+  Pet.fromMemory(this.petStats, this.hasPooped, this.petIsSick);
 
   void refreshPet() {
     petStats.refreshStats();
     tryPoop();
   }
 
-  void eat() {
-    int statIncreaseFromEating = 5;
-    petStats.changeStatByAmount(Stats.hunger, statIncreaseFromEating);
+  void eat(int foodValue) {
+    petStats.changeStatByAmount(Stats.hunger, foodValue);
+  }
+  
+  bool isSleeping() {
+    return petStats.isSleeping;
   }
 
-  void sleep() {
-    isSleeping = true;
-    petStats.changeEnergyByAmount(0);
+  void sleep(int amountSlept) {
+    petStats.isSleeping = true;
+    petStats.startSleeping();
   }
 
   void wakeUp() {
-    isSleeping = false;
-    petStats.changeEnergyByAmount(0);
+    refreshPet();
+    petStats.isSleeping = false;
   }
 
-  void hadFun() {
-    petStats.changeFunByAmount(5);
+  void hadFun(int funAmount) {
+    petStats.changeFunByAmount(funAmount);
   }
 
-  void isSick() {
-    //TODO What defines a sick pet?
-    // Maybe length of time that the pet is ignored.
+  isSick() {
+    petIsSick = petStats.minutesSinceLastInteraction() > 5;
   }
 
   bool isDead() {
@@ -50,7 +55,8 @@ class Pet {
   }
 
   giveMedicine() {
-    //TODO Cure the sickness.
+    petStats.latestInteraction = DateTime.now();
+    refreshPet();
   }
 
   tryPoop() {
@@ -58,6 +64,10 @@ class Pet {
     if (rng.nextInt(5) == 1) {
       hasPooped = true;
     }
+  }
+  
+  cleanPoop() {
+    hasPooped = false;
   }
 
 }
