@@ -29,16 +29,18 @@ class _ScreenState extends State<Screen> {
 
   @override
   void initState() {
-    pixelLength = MediaQuery.of(context).size.width / 120;
-    numRows = MediaQuery.of(context).size.height ~/ pixelLength;
-    initiateScreenPixels();
-    screens = new List<List<List<Pixel>>>();
-    screens.add(startScreenPixels);
-    screens.add(petScreenPixels);
-    screens.add(gameScreenPixels);
-    screens.add(infoScreenPixels);
-    currentScreen = 0;
     super.initState();
+    Future.delayed(Duration.zero, () {
+      pixelLength = MediaQuery.of(context).size.width / 120;
+      numRows = MediaQuery.of(context).size.height ~/ pixelLength;
+      initiateScreenPixels();
+      screens = new List<List<List<Pixel>>>();
+      screens.add(startScreenPixels);
+      screens.add(petScreenPixels);
+      screens.add(gameScreenPixels);
+      screens.add(infoScreenPixels);
+      currentScreen = 0;
+    });
   }
 
   void initiateScreenPixels() {
