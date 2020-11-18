@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tamagotchi/eight_bit_screen.dart';
-
 import 'Screen/screen_colors.dart';
 
 void main() {
