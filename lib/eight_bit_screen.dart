@@ -77,7 +77,7 @@ class _EightBitScreenState extends State<EightBitScreen> {
           width: 10,
           height: 10,
           child: Container(
-            color: isFilled ? Colors.black : Colors.green,
+            color: isFilled ? color["dark"] : color["light"],
           ),
         ),
       );
