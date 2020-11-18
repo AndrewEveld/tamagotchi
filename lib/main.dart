@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tamagotchi/eight_bit_screen.dart';
 
+import 'Screen/screen_colors.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -62,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.greenAccent,
+      backgroundColor: color["super light"],
       body: _gameScreen
     );
   }

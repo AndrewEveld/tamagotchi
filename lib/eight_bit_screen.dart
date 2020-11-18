@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:tamagotchi/Screen/screen_colors.dart';
 
 class EightBitScreen extends StatefulWidget {
   static _EightBitScreenState of(BuildContext context) => context.findAncestorStateOfType<_EightBitScreenState>();
