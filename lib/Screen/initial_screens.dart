@@ -6,8 +6,8 @@ import 'coordinate.dart';
 
 void doNothing() {}
 
-Pixel createBlankPixel(double length) {
-  return Pixel(false, color["light"], doNothing, length);
+Pixel createBlankPixel() {
+  return Pixel(false, color["light"], doNothing);
 }
 
 List<Coordinate> startScreenInitialCoords = new List<Coordinate>();
@@ -15,23 +15,22 @@ List<bool> startScreenInitialFixed = new List<bool>();
 List<Color> startScreenInitialColors = new List<Color>();
 List<Widget Function()> startScreenInitialOnClickFuncs = new List<Widget Function()>();
 
-List<List<Pixel>> initiateStartScreenPixels(double length, int numRows) {
+List<List<Pixel>> initiateStartScreenPixels(int numCols, int numRows) {
   List<List<Pixel>> rows = new List<List<Pixel>>();
   for (int i = 0; i < numRows; i++) {
     List<Pixel> row = new List<Pixel>();
-    for (int j = 0; j < 120; j++) {
-      if (startScreenInitialCoords.contains(Coordinate(120-j, numRows-i))) {
-        int index = startScreenInitialCoords.indexOf(Coordinate(120-j, numRows-i));
+    for (int j = 0; j < numCols; j++) {
+      if (startScreenInitialCoords.contains(Coordinate(numCols-j, numRows-i))) {
+        int index = startScreenInitialCoords.indexOf(Coordinate(numCols-j, numRows-i));
         row.add(
             Pixel(
                 startScreenInitialFixed[index],
                 startScreenInitialColors[index],
-                startScreenInitialOnClickFuncs[index],
-                length
+                startScreenInitialOnClickFuncs[index]
             )
         );
       } else {
-        row.add(createBlankPixel(length));
+        row.add(createBlankPixel());
       }
     }
     rows.add(row);
@@ -44,23 +43,22 @@ List<bool> petScreenInitialFixed = new List<bool>();
 List<Color> petScreenInitialColors = new List<Color>();
 List<Widget Function()> petScreenInitialOnClickFuncs = new List<Widget Function()>();
 
-List<List<Pixel>> initiatePetScreenPixels(double length, int numRows) {
+List<List<Pixel>> initiatePetScreenPixels(int numCols, int numRows) {
   List<List<Pixel>> rows = new List<List<Pixel>>();
   for (int i = 0; i < numRows; i++) {
     List<Pixel> row = new List<Pixel>();
-    for (int j = 0; j < 120; j++) {
-      if (petScreenInitialCoords.contains(Coordinate(120-j, numRows-i))) {
-        int index = petScreenInitialCoords.indexOf(Coordinate(120-j, numRows-i));
+    for (int j = 0; j < numCols; j++) {
+      if (petScreenInitialCoords.contains(Coordinate(numCols-j, numRows-i))) {
+        int index = petScreenInitialCoords.indexOf(Coordinate(numCols-j, numRows-i));
         row.add(
             Pixel(
                 petScreenInitialFixed[index],
                 petScreenInitialColors[index],
-                petScreenInitialOnClickFuncs[index],
-                length
+                petScreenInitialOnClickFuncs[index]
             )
         );
       } else {
-        row.add(createBlankPixel(length));
+        row.add(createBlankPixel());
       }
     }
     rows.add(row);
@@ -73,23 +71,22 @@ List<bool> gameScreenInitialFixed = new List<bool>();
 List<Color> gameScreenInitialColors = new List<Color>();
 List<Widget Function()> gameScreenInitialOnClickFuncs = new List<Widget Function()>();
 
-List<List<Pixel>> initiateGameScreenPixels(double length, int numRows) {
+List<List<Pixel>> initiateGameScreenPixels(int numCols, int numRows) {
   List<List<Pixel>> rows = new List<List<Pixel>>();
   for (int i = 0; i < numRows; i++) {
     List<Pixel> row = new List<Pixel>();
-    for (int j = 0; j < 120; j++) {
-      if (gameScreenInitialCoords.contains(Coordinate(120-j, numRows-i))) {
-        int index = gameScreenInitialCoords.indexOf(Coordinate(120-j, numRows-i));
+    for (int j = 0; j < numCols; j++) {
+      if (gameScreenInitialCoords.contains(Coordinate(numCols-j, numRows-i))) {
+        int index = gameScreenInitialCoords.indexOf(Coordinate(numCols-j, numRows-i));
         row.add(
             Pixel(
                 gameScreenInitialFixed[index],
                 gameScreenInitialColors[index],
-                gameScreenInitialOnClickFuncs[index],
-                length
+                gameScreenInitialOnClickFuncs[index]
             )
         );
       } else {
-        row.add(createBlankPixel(length));
+        row.add(createBlankPixel());
       }
     }
     rows.add(row);
@@ -102,23 +99,22 @@ List<bool> infoScreenInitialFixed = new List<bool>();
 List<Color> infoScreenInitialColors = new List<Color>();
 List<Widget Function()> infoScreenInitialOnClickFuncs = new List<Widget Function()>();
 
-List<List<Pixel>> initiateInfoScreenPixels(double length, int numRows) {
+List<List<Pixel>> initiateInfoScreenPixels(int numCols, int numRows) {
   List<List<Pixel>> rows = new List<List<Pixel>>();
   for (int i = 0; i < numRows; i++) {
     List<Pixel> row = new List<Pixel>();
-    for (int j = 0; j < 120; j++) {
-      if (infoScreenInitialCoords.contains(Coordinate(120-j, numRows-i))) {
-        int index = infoScreenInitialCoords.indexOf(Coordinate(120-j, numRows-i));
+    for (int j = 0; j < numCols; j++) {
+      if (infoScreenInitialCoords.contains(Coordinate(numCols-j, numRows-i))) {
+        int index = infoScreenInitialCoords.indexOf(Coordinate(numCols-j, numRows-i));
         row.add(
             Pixel(
                 infoScreenInitialFixed[index],
                 infoScreenInitialColors[index],
-                infoScreenInitialOnClickFuncs[index],
-                length
+                infoScreenInitialOnClickFuncs[index]
             )
         );
       } else {
-        row.add(createBlankPixel(length));
+        row.add(createBlankPixel());
       }
     }
     rows.add(row);

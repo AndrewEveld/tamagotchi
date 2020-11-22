@@ -23,31 +23,26 @@ class _ScreenState extends State<Screen> {
   List<List<List<Pixel>>> screens;
   int currentScreen;
   bool isInverse = false;
-  int numCols = 120;
-  int numRows;
-  double pixelLength;
+  int numCols = 60;
+  int numRows = 120;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      pixelLength = MediaQuery.of(context).size.width / 120;
-      numRows = MediaQuery.of(context).size.height ~/ pixelLength;
-      initiateScreenPixels();
-      screens = new List<List<List<Pixel>>>();
-      screens.add(startScreenPixels);
-      screens.add(petScreenPixels);
-      screens.add(gameScreenPixels);
-      screens.add(infoScreenPixels);
-      currentScreen = 0;
-    });
+    initiateScreenPixels();
+    screens = new List<List<List<Pixel>>>();
+    screens.add(startScreenPixels);
+    screens.add(petScreenPixels);
+    screens.add(gameScreenPixels);
+    screens.add(infoScreenPixels);
+    currentScreen = 0;
   }
 
   void initiateScreenPixels() {
-    startScreenPixels = initiateStartScreenPixels(pixelLength, numRows);
-    petScreenPixels = initiatePetScreenPixels(pixelLength, numRows);
-    gameScreenPixels = initiateGameScreenPixels(pixelLength, numRows);
-    infoScreenPixels = initiateInfoScreenPixels(pixelLength, numRows);
+    startScreenPixels = initiateStartScreenPixels(numCols, numRows);
+    petScreenPixels = initiatePetScreenPixels(numCols, numRows);
+    gameScreenPixels = initiateGameScreenPixels(numCols, numRows);
+    infoScreenPixels = initiateInfoScreenPixels(numCols, numRows);
   }
 
   void doNothing() {}
@@ -59,7 +54,7 @@ class _ScreenState extends State<Screen> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         color: color["super light"],
-        child: Column(children: getRows())
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: getRows())
       )
     );
   }
@@ -71,7 +66,7 @@ class _ScreenState extends State<Screen> {
       for (Pixel p in l) {
         row.add(p.pixelBuild(context));
       }
-      rows.add(Row(children: row));
+      rows.add(Row(mainAxisAlignment: MainAxisAlignment.center, children: row));
     }
     return rows;
   }
@@ -92,7 +87,10 @@ class _ScreenState extends State<Screen> {
 
   void fillPixels(List<Coordinate> coords, List<Color> colors, Function() onClick, int xOffset, int yOffset) {
     for (int i = 0; i < coords.length; i++) {
-      screens[currentScreen][coords[i].y + yOffset - numRows][coords[i].x + xOffset - numCols].fill(colors[i], onClick);
+      if ((0 <= coords[i].y + yOffset - numRows) && (coords[i].y + yOffset - numRows < 120) &&
+          (0 <= coords[i].x + xOffset - numCols) && (coords[i].x + xOffset - numCols < 60)) {
+        screens[currentScreen][coords[i].y + yOffset - numRows][coords[i].x + xOffset - numCols].fill(colors[i], onClick);
+      }
     }
   }
 

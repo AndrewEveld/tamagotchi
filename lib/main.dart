@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tamagotchi/eight_bit_screen.dart';
+import 'package:tamagotchi/Screen/screen.dart';
 import 'Screen/screen_colors.dart';
 
 void main() {
@@ -52,11 +53,11 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  EightBitScreen _gameScreen;
+  Screen _gameScreen;
 
   @override
   void initState() {
-    _gameScreen = EightBitScreen();
+    _gameScreen = new Screen();
     super.initState();
   }
 
