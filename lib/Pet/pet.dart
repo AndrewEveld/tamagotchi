@@ -12,10 +12,18 @@ class Pet {
     hasPooped = false;
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      'petStats': petStats.toJson(),
+      'hasPooped': hasPooped,
+      'petIsSick': petIsSick,
+    };
+  }
+
   Pet.fromJson(Map<String, dynamic> json)
-    : petStats = PetStats.fromJson(json['petStats']),
-      hasPooped = json['hasPooped'],
-      petIsSick = json['petIsSick'];
+      : petStats = PetStats.fromJson(json['petStats']),
+        hasPooped = json['hasPooped'],
+        petIsSick = json['petIsSick'];
 
   Pet.fromMemory(this.petStats, this.hasPooped, this.petIsSick);
 
@@ -27,12 +35,12 @@ class Pet {
   void eat(int foodValue) {
     petStats.changeStatByAmount(Stats.hunger, foodValue);
   }
-  
+
   bool isSleeping() {
     return petStats.isSleeping;
   }
 
-  void sleep(int amountSlept) {
+  void sleep() {
     petStats.isSleeping = true;
     petStats.startSleeping();
   }
@@ -65,7 +73,7 @@ class Pet {
       hasPooped = true;
     }
   }
-  
+
   cleanPoop() {
     hasPooped = false;
   }

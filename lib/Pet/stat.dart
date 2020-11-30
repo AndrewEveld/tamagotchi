@@ -11,32 +11,35 @@ class PetStats {
 
   PetStats() {
     initializeAllStats();
+    latestInteraction = DateTime.now();
+    isSleeping = false;
   }
 
   PetStats.fromJson(Map<String, dynamic> json) {
     initializeAllStats();
-    statsMap[Stats.hunger] = Stat.fromJson(json['hunger'], Stats.hunger);
-    statsMap[Stats.energy] = Stat.fromJson(json['energy'], Stats.energy);
-    statsMap[Stats.fun] = Stat.fromJson(json['fun'], Stats.fun);
-    statsMap[Stats.hygiene] = Stat.fromJson(json['hygiene'], Stats.hygiene);
+    statsMap[Stats.hunger] = Stat.fromJson(json['Stats.hunger'], Stats.hunger);
+    statsMap[Stats.energy] = Stat.fromJson(json['Stats.energy'], Stats.energy);
+    statsMap[Stats.fun] = Stat.fromJson(json['Stats.fun'], Stats.fun);
+    statsMap[Stats.hygiene] = Stat.fromJson(json['Stats.hygiene'], Stats.hygiene);
     isSleeping = json['isSleeping'];
-    latestInteraction = json['latestInteraction'];
+    latestInteraction = DateTime.parse(json['latestInteraction']);
   }
 
 
   Map<String, dynamic> toJson() {
     return {
-      'hunger' : statsMap[Stats.hunger].toJson(),
-      'energy' : statsMap[Stats.energy].toJson(),
-      'fun' : statsMap[Stats.fun].toJson(),
-      'hygiene' : statsMap[Stats.hygiene].toJson(),
+      'Stats.hunger' : statsMap[Stats.hunger].toJson(),
+      'Stats.energy' : statsMap[Stats.energy].toJson(),
+      'Stats.fun' : statsMap[Stats.fun].toJson(),
+      'Stats.hygiene' : statsMap[Stats.hygiene].toJson(),
       'isSleeping' : isSleeping,
-      'latestInteraction' : latestInteraction
+      'latestInteraction' : latestInteraction.toString(),
     };
   }
 
 
   initializeAllStats() {
+    statsMap = Map();
     for (Stats stat in Stats.values) {
       statsMap.putIfAbsent(stat, () => Stat(stat));
     }
@@ -45,7 +48,7 @@ class PetStats {
   refreshStats() {
     statsMap.values.forEach(refreshStat);
   }
-  
+
   refreshStat(Stat stat) {
     if (stat.stat == Stats.energy && isSleeping) {
       stat.refreshStat(true);
@@ -85,7 +88,7 @@ class PetStats {
   bool isStatZero(Stat stat) {
     return stat.value == 0;
   }
-  
+
   DateTime getLastInteraction() {
     return latestInteraction;
   }
@@ -110,13 +113,13 @@ class Stat {
 
   Stat.fromJson(Map<String, dynamic> json, this.stat) {
     value = json['value'];
-    mostRecentTimeChange = json['mostRecentTimeChange'];
+    mostRecentTimeChange = DateTime.parse(json['mostRecentTimeChange']);
   }
 
   Map<String, dynamic> toJson() {
     return {
       'value' : value,
-      'mostRecentTimeChange' : mostRecentTimeChange,
+      'mostRecentTimeChange' : mostRecentTimeChange.toString(),
     };
   }
 
@@ -137,17 +140,17 @@ class Stat {
   }
 
   refreshStat(bool isRefreshPositive) {
-    int refreshSignMultiplier = isRefreshPositive ? 1 : -1;
+    int refreshSignMultiplier = isRefreshPositive ? 2 : -1;
     int changeStatBy = calculateChangeSinceUpdate();
     changeStatByAmount(changeStatBy * refreshSignMultiplier);
     updateTime();
   }
-  
+
   int calculateChangeSinceUpdate() {
     DateTime currentTime = DateTime.now();
     Duration difference = currentTime.difference(mostRecentTimeChange);
     return difference.inMinutes;
-    
+
   }
 }
 
