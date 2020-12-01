@@ -32,6 +32,8 @@ class _ScreenState extends State<Screen> {
   List<List<Function()>> petScreenFuncs;
   List<List<Pixel>> infoScreenPixels;
   List<List<Function()>> infoScreenFuncs;
+  List<List<Pixel>> deadScreenPixels;
+  List<List<Function()>> deadScreenFuncs;
   List<List<List<Pixel>>> screens;
   List<List<List<Function()>>> screensFuncs;
   int currentScreen;
@@ -48,8 +50,8 @@ class _ScreenState extends State<Screen> {
   void initState() {
     super.initState();
     initiateScreens();
-    screens = [startScreenPixels, petScreenPixels, infoScreenPixels];
-    screensFuncs = [startScreenFuncs, petScreenFuncs, infoScreenFuncs];
+    screens = [startScreenPixels, petScreenPixels, infoScreenPixels, deadScreenPixels];
+    screensFuncs = [startScreenFuncs, petScreenFuncs, infoScreenFuncs, deadScreenFuncs];
     currentScreen = 0;
   }
 
@@ -57,9 +59,11 @@ class _ScreenState extends State<Screen> {
     startScreenPixels = new List<List<Pixel>>();
     petScreenPixels = new List<List<Pixel>>();
     infoScreenPixels = new List<List<Pixel>>();
+    deadScreenPixels = new List<List<Pixel>>();
     startScreenFuncs = new List<List<Function()>>();
     petScreenFuncs = new List<List<Function()>>();
     infoScreenFuncs = new List<List<Function()>>();
+    deadScreenFuncs = new List<List<Function()>>();
   }
 
   Pixel createBlankPixel() {
@@ -81,7 +85,7 @@ class _ScreenState extends State<Screen> {
     }
   }
 
-  void initiatePetScreenPixels() {
+  void initiatePetScreen() {
     Map<String, Function()> iconFuncs = {
       "feed" : chooseFood,
       "sleep" : sleep,
@@ -114,6 +118,8 @@ class _ScreenState extends State<Screen> {
       }
     }
 
+
+
     // create pet viewing screen pixels and add to list,
     // add onClick  functions to list  at matching indices
     for (int i = 0; i < numRows; i++) {
@@ -136,6 +142,102 @@ class _ScreenState extends State<Screen> {
     }
   }
 
+  void initiateInfoScreen() {
+    infoScreenPixels = new List<List<Pixel>>();
+    infoScreenFuncs = new List<List<Function()>>();
+    List<Coordinate> initialCoords = new List<Coordinate>();
+    List<bool> initialFixed = new List<bool>();
+    List<Color> initialColors = new List<Color>();
+    List<Function ()> initialFuncs = new List<Function()>();
+
+    initialCoords.addAll(offsetCoords(getWordCoords("back"), 30, 111));
+    initialColors.addAll(getWordColors("back"));
+    for (Color c in getWordColors("back")) {
+      initialFixed.add(false);
+      initialFuncs.add(goToPet);
+    }
+
+    for (int i = 0; i < numCols; i++) {
+      initialCoords.add(Coordinate(i,107));
+      initialColors.add(color["dark"]);
+      initialFixed.add(false);
+      initialFuncs.add(doNothing);
+    }
+
+    initialCoords.addAll(offsetCoords(getWordCoords("AGE"), 10, 92));
+    initialColors.addAll(getWordColors("AGE"));
+    for (Color c in getWordColors("AGE")) {
+      initialFixed.add(false);
+      initialFuncs.add(doNothing);
+    }
+
+    String age = pet.ageInMinutes().toString() + "  minutes";
+    initialCoords.addAll(offsetCoords(getWordCoords(age), 15, 84));
+    initialColors.addAll(getWordColors(age));
+    for (Color c in getWordColors(age)) {
+      initialFixed.add(false);
+      initialFuncs.add(doNothing);
+    }
+
+    for (int i = 0; i < numRows; i++) {
+      List<Pixel> row = new List<Pixel>();
+      List<Function()> rowFuncs = new List<Function()>();
+      for (int j = 0; j < numCols; j++) {
+        int y = numRows - 1 - i;
+        int x = j;
+        if (initialCoords.contains(Coordinate(x,y))){
+          int index = initialCoords.indexOf(Coordinate(x,y));
+          row.add(Pixel(initialFixed[index], initialColors[index]));
+          rowFuncs.add(initialFuncs[index]);
+        } else {
+          row.add(createBlankPixel());
+          rowFuncs.add(doNothing);
+        }
+      }
+      infoScreenPixels.add(row);
+      infoScreenFuncs.add(rowFuncs);
+    }
+  }
+
+  void initiateDeadScreen() {
+    List<Coordinate> initialCoords = new List<Coordinate>();
+    List<bool> initialFixed = new List<bool>();
+    List<Color> initialColors = new List<Color>();
+    List<Function ()> initialFuncs = new List<Function()>();
+
+    initialCoords.addAll(offsetCoords(getWordCoords("YOUR PET"), 22, 62));
+    initialColors.addAll(getWordColors("YOUR PET"));
+    for (Color c in getWordColors("YOUR PET")) {
+      initialFixed.add(false);
+      initialFuncs.add(doNothing);
+    }
+
+    initialCoords.addAll(offsetCoords(getWordCoords("DIED"), 24, 49));
+    initialColors.addAll(getWordColors("DIED"));
+    for (Color c in getWordColors("DIED")) {
+      initialFixed.add(false);
+      initialFuncs.add(doNothing);
+    }
+
+    for (int i = 0; i < numRows; i++) {
+      List<Pixel> row = new List<Pixel>();
+      List<Function()> rowFuncs = new List<Function()>();
+      for (int j = 0; j < numCols; j++) {
+        int y = numRows - 1 - i;
+        int x = j;
+        if (initialCoords.contains(Coordinate(x,y))){
+          int index = initialCoords.indexOf(Coordinate(x,y));
+          row.add(Pixel(initialFixed[index], initialColors[index]));
+          rowFuncs.add(initialFuncs[index]);
+        } else {
+          row.add(createBlankPixel());
+          rowFuncs.add(doNothing);
+        }
+      }
+      deadScreenPixels.add(row);
+      deadScreenFuncs.add(rowFuncs);
+    }
+  }
 
   void doNothing() {}
 
@@ -163,6 +265,17 @@ class _ScreenState extends State<Screen> {
       }
       if (((pooped == false) && (pet.hasPooped == true)) && currentScreen == 1)  {
         poop();
+      }
+      if (pet.isDead()) {
+        initiateDeadScreen();
+        currentScreen = 3;
+        setState(() {
+          for (List<Pixel> l in deadScreenPixels) {
+            for (Pixel p in l) {
+              p.inversePixel();
+            }
+          }
+        });
       }
     } else if (startScreenPixels.length == 0) {
       initiateStartScreen();
@@ -245,7 +358,7 @@ class _ScreenState extends State<Screen> {
       new Timer(const Duration(seconds: 1), () => doNothing());
     }
     pet = new Pet();
-    initiatePetScreenPixels();
+    initiatePetScreen();
     started = true;
     goToPet();
   }
@@ -372,6 +485,7 @@ class _ScreenState extends State<Screen> {
 
   void goToInfo() {
     if (!ongoingAction) {
+      initiateInfoScreen();
       setState(() {
         currentScreen = 2;
       });
