@@ -146,7 +146,10 @@ class Stat {
   int changeStatByAmount(int amount) {
     updateTime();
     value += amount;
-    return roundValue();
+    if (value > 10) {
+      value = 10;
+    }
+    return value;
   }
 
   updateTime() {

@@ -6,63 +6,31 @@ class Pixel {
 
   bool fixed;
   Color mainColor;
-  Function() onClickFunction;
   Color currentColor;
-  bool isInverse;
-  int numCols = 60;
-  int numRows = 120;
-  // will need grid and pet variables
+  bool isInverse = false;
 
-  Pixel(this.fixed, this.mainColor, this.onClickFunction) {
+
+  Pixel(this.fixed, this.mainColor) {
     currentColor = mainColor;
-    isInverse = false;
   }
 
   void inversePixel() {
-    isInverse = !isInverse;
-    currentColor = inverseColor[currentColor];
+    if (!fixed) {
+      isInverse = !isInverse;
+      currentColor = inverseColor[currentColor];
+    }
   }
 
-  void fill(Color c, Function() f) {
+  void fill(Color c) {
     if (!fixed){
       currentColor = c;
-      onClickFunction = f;
     }
   }
 
   void empty() {
     if (!fixed){
       currentColor = mainColor;
-      onClickFunction = doNothing;
     }
-  }
-
-  void doNothing() {}
-
-  double getLength(BuildContext context) {
-    if ((MediaQuery.of(context).size.width / numCols) < (MediaQuery.of(context).size.height / numRows)) {
-      return (MediaQuery.of(context).size.width / numCols);
-    }
-    return (MediaQuery.of(context).size.height / numRows);
-  }
-
-  Widget pixelBuild(BuildContext context) {
-    double length = getLength(context);
-    return (GestureDetector(
-      child: Container(
-        margin: EdgeInsets.all(length/40),
-        child:  SizedBox(
-          width: 19*length/20,
-          height: 19*length/20,
-          child: Container(
-            color: currentColor,
-          ),
-        ),
-      ),
-      onTap: () {
-        onClickFunction();
-      },
-    ));
   }
 
 }
