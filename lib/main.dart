@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tamagotchi/Pet/pet.dart';
 import 'package:tamagotchi/eight_bit_screen.dart';
 import 'package:tamagotchi/Screen/screen.dart';
 import 'Screen/screen_colors.dart';
@@ -67,5 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: color["super light"],
       body: _gameScreen
     );
+  }
+
+  Future<bool> doesPetExist() async {
+    Pet fromMemory = await Pet().readData();
+    return fromMemory.petExists;
   }
 }
