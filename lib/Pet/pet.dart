@@ -8,6 +8,7 @@ class Pet {
   PetStats petStats;
   bool hasPooped;
   bool petIsSick;
+  bool petExists;
 
   Pet() {
     petStats = PetStats();
@@ -116,6 +117,7 @@ class Pet {
       Map<String, dynamic> decoded = jsonDecode(contents);
       Pet fromMemory = Pet.fromJson(decoded);
       print("reading successful");
+      fromMemory.petExists = true;
       return fromMemory;
     }
     catch (e) {
@@ -123,6 +125,8 @@ class Pet {
       return Pet();
     }
   }
+
+
 
 
 }
