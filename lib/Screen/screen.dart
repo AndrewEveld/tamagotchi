@@ -53,6 +53,21 @@ class _ScreenState extends State<Screen> {
     screens = [startScreenPixels, petScreenPixels, infoScreenPixels, deadScreenPixels];
     screensFuncs = [startScreenFuncs, petScreenFuncs, infoScreenFuncs, deadScreenFuncs];
     currentScreen = 0;
+    doesPetExist().then((petExists) {
+      if (petExists) {
+        Pet().readData().then((value) {
+          setState(() {
+            started = true;
+            pet = value;
+            isInverse = pet.isSleeping();
+            pooped = pet.hasPooped;
+            isSick = pet.isSick();
+            initiatePetScreen();
+            currentScreen = 1;
+          });
+        });
+      }
+    });
   }
 
   void initiateScreens() {
@@ -550,6 +565,11 @@ class _ScreenState extends State<Screen> {
       colors.addAll(alphabetColors[w[i]]);
     }
     return colors;
+  }
+
+  Future<bool> doesPetExist() async {
+    Pet fromMemory = await Pet().readData();
+    return fromMemory.petExists;
   }
 
 }

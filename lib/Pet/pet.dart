@@ -15,6 +15,7 @@ class Pet {
     petStats = PetStats();
     hasPooped = false;
     timeBorn = DateTime.now();
+    petExists = false;
   }
 
   Map<String, dynamic> toJson() {
