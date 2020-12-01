@@ -108,7 +108,7 @@ class _ScreenState extends State<Screen> {
     for (int i = 0; i < icons.length; i++) {
       initialCoords.addAll(offsetCoords(iconCoords, i * 15, 0));
       initialColors.addAll(iconColors[icons[i]]);
-      for (Coordinate c in offsetCoords(iconCoords, i * 15, 0)) {
+      for (int j = 0; j < iconCoords.length; j++ ) {
         initialFixed.add(true);
         initialFuncs.add(iconFuncs[icons[i]]);
       }
