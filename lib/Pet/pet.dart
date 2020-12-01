@@ -77,7 +77,8 @@ class Pet {
     }
   }
 
-  cleanPoop() {
+  bathe() {
+    petStats.changeStatByAmount(Stats.hygiene, 10);
     hasPooped = false;
   }
 
