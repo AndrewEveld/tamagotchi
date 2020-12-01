@@ -166,6 +166,7 @@ class Stat {
     int refreshSignMultiplier = isRefreshPositive ? 2 : -1;
     int changeStatBy = calculateChangeSinceUpdate();
     changeStatByAmount(changeStatBy * refreshSignMultiplier);
+    roundValue();
     updateTime();
   }
 
