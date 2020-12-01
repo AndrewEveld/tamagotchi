@@ -156,7 +156,6 @@ class _ScreenState extends State<Screen> {
     if (started) {
       drawPet();
       pet.refreshPet();
-      fillPetFunc();
       emptyStatBars();
       fillStatBars();
       if (((isSick == false) && (pet.petIsSick == true)) && currentScreen == 1)  {
@@ -168,12 +167,6 @@ class _ScreenState extends State<Screen> {
     } else if (startScreenPixels.length == 0) {
       initiateStartScreen();
       start();
-    }
-  }
-
-  void fillPetFunc() {
-    for (Coordinate c in petCoords) {
-      screensFuncs[1][c.y - numRows][c.x]  = givePets;
     }
   }
 
