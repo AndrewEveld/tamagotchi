@@ -92,6 +92,7 @@ class _ScreenState extends State<Screen> {
     List<Coordinate> initialCoords = new List<Coordinate>();
     List<bool> initialFixed = new List<bool>();
     List<Color> initialColors = new List<Color>();
+    List<Function ()> initialFuncs = new List<Function()>();
 
     // add pet stats to pet viewing screen
     for (Stats s in Stats.values) {
@@ -99,6 +100,7 @@ class _ScreenState extends State<Screen> {
       initialColors.addAll(getWordColors(statString[s]));
       for (Color c in getWordColors(statString[s])) {
         initialFixed.add(true);
+        initialFuncs.add(doNothing);
       }
     }
 
@@ -108,7 +110,7 @@ class _ScreenState extends State<Screen> {
       initialColors.addAll(iconColors[icons[i]]);
       for (Coordinate c in offsetCoords(iconCoords, i * 15, 0)) {
         initialFixed.add(true);
-        petScreenFuncs[numRows - 1 - c.y][c.x] = iconFuncs[icons[i]];
+        initialFuncs.add(iconFuncs[icons[i]]);
       }
     }
 
@@ -123,6 +125,7 @@ class _ScreenState extends State<Screen> {
         if (initialCoords.contains(Coordinate(x,y))){
           int index = initialCoords.indexOf(Coordinate(x,y));
           row.add(Pixel(initialFixed[index], initialColors[index]));
+          rowFuncs.add(initialFuncs[index]);
         } else {
           row.add(createBlankPixel());
           rowFuncs.add(doNothing);
