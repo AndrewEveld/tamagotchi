@@ -232,6 +232,21 @@ Map<Stats, String> statString = {
 };
 
 List<Coordinate> statBarCoords = [
-  Coordinate(0,1), Coordinate(1,1), Coordinate(2,1), Coordinate(3,1), Coordinate(4,1), Coordinate(5,1), Coordinate(6,1), Coordinate(7,1), Coordinate(8,1), Coordinate(9,1),
-  Coordinate(0,0), Coordinate(1,0), Coordinate(2,0), Coordinate(3,0), Coordinate(4,0), Coordinate(5,0), Coordinate(6,0), Coordinate(7,0), Coordinate(8,0), Coordinate(9,0)
+  Coordinate(0,1), Coordinate(1,1), Coordinate(2,1), Coordinate(3,1), Coordinate(4,1), Coordinate(5,1), Coordinate(6,1), Coordinate(7,1), Coordinate(8,1), Coordinate(9,1), Coordinate(10,1), Coordinate(11,1), Coordinate(12,1), Coordinate(13,1), Coordinate(14,1), Coordinate(15,1), Coordinate(16,1), Coordinate(17,1), Coordinate(18,1), Coordinate(19,1),
+  Coordinate(0,0), Coordinate(1,0), Coordinate(2,0), Coordinate(3,0), Coordinate(4,0), Coordinate(5,0), Coordinate(6,0), Coordinate(7,0), Coordinate(8,0), Coordinate(9,0), Coordinate(10,0), Coordinate(11,0), Coordinate(12,0), Coordinate(13,0), Coordinate(14,0), Coordinate(15,0), Coordinate(16,0), Coordinate(17,0), Coordinate(18,0), Coordinate(19,0)
 ];
+
+List<List<Coordinate>> statBarIncrementedCoords = [
+  [Coordinate(0,1), Coordinate(1,1), Coordinate(0,0), Coordinate(1,0)],
+  [Coordinate(2,1), Coordinate(3,1), Coordinate(2,0), Coordinate(3,0)],
+  [Coordinate(4,1), Coordinate(5,1), Coordinate(4,0), Coordinate(5,0)],
+  [Coordinate(6,1), Coordinate(7,1), Coordinate(6,0), Coordinate(7,0)],
+  [Coordinate(8,1), Coordinate(9,1), Coordinate(8,0), Coordinate(9,0)],
+  [Coordinate(10,1), Coordinate(11,1), Coordinate(10,0), Coordinate(11,0)],
+  [Coordinate(12,1), Coordinate(13,1), Coordinate(12,0), Coordinate(13,0)],
+  [Coordinate(14,1), Coordinate(15,1), Coordinate(14,0), Coordinate(15,0)],
+  [Coordinate(16,1), Coordinate(17,1), Coordinate(16,0), Coordinate(17,0)],
+  [Coordinate(18,1), Coordinate(19,1), Coordinate(18,0), Coordinate(19,0)]
+];
+
+List<Color> statBarIncrementedColors = [color["dark"], color["dark"], color["dark"], color["dark"]];

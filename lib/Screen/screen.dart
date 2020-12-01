@@ -99,7 +99,7 @@ class _ScreenState extends State<Screen> {
       initialCoords.addAll(offsetCoords(getWordCoords(statString[s]), statXOffset[s], statYOffset[s]));
       initialColors.addAll(getWordColors(statString[s]));
       for (Color c in getWordColors(statString[s])) {
-        initialFixed.add(true);
+        initialFixed.add(false);
         initialFuncs.add(doNothing);
       }
     }
@@ -215,8 +215,8 @@ class _ScreenState extends State<Screen> {
       List<Coordinate> coords = new List<Coordinate>();
       List<Color> colors = new List<Color>();
       for (int i = 0; i < (pet.petStats.statsMap[s].value).round(); i++) {
-        coords.addAll([Coordinate(i,0), Coordinate(i,1)]);
-        colors.addAll([color["dark"], color["dark"]]);
+        coords.addAll(statBarIncrementedCoords[i]);
+        colors.addAll(statBarIncrementedColors);
       }
       fillPixels(coords, colors, doNothing, statXOffset[s], statYOffset[s] - 3);
     }
@@ -260,11 +260,13 @@ class _ScreenState extends State<Screen> {
 
   void sleep() {
     if (!ongoingAction || isInverse) {
-      for (List<Pixel> l in petScreenPixels) {
-        for (Pixel p in l) {
-          p.inversePixel();
+      setState(() {
+        for (List<Pixel> l in petScreenPixels) {
+          for (Pixel p in l) {
+            p.inversePixel();
+          }
         }
-      }
+      });
       if (!isInverse) {
         pet.sleep();
       } else {
@@ -316,6 +318,9 @@ class _ScreenState extends State<Screen> {
   void eatApple() {eat(Food.apple);}
 
   void eat(Food f) {
+    for (int i = 0; i < Food.values.length; i++) {
+      emptyPixels(foodCoords, 6, 15 + (15 * i));
+    }
     fillPixels(foodCoords, foodColors[f], doNothing, 9, 35);
     for (int i = 49; i > 34; i--) {
       new Timer(const Duration(milliseconds: 300), () => doNothing());
