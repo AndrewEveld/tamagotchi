@@ -36,6 +36,7 @@ main() {
     Pet same = Pet();
     Pet different = Pet();
     same.petStats = original.petStats;
+    same.timeBorn = original.timeBorn;
     expect(original, same);
     expect(original, isNot(equals(different)));
   });

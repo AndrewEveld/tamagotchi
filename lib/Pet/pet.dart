@@ -9,10 +9,12 @@ class Pet {
   bool hasPooped;
   bool petIsSick;
   bool petExists;
+  DateTime timeBorn;
 
   Pet() {
     petStats = PetStats();
     hasPooped = false;
+    timeBorn = DateTime.now();
   }
 
   Map<String, dynamic> toJson() {
@@ -20,13 +22,15 @@ class Pet {
       'petStats': petStats.toJson(),
       'hasPooped': hasPooped,
       'petIsSick': petIsSick,
+      'timeBorn': timeBorn.toString(),
     };
   }
 
   Pet.fromJson(Map<String, dynamic> json)
       : petStats = PetStats.fromJson(json['petStats']),
         hasPooped = json['hasPooped'],
-        petIsSick = json['petIsSick'];
+        petIsSick = json['petIsSick'],
+        timeBorn = DateTime.parse(json['timeBorn']);
 
   Pet.fromMemory(this.petStats, this.hasPooped, this.petIsSick);
 
@@ -86,7 +90,8 @@ class Pet {
   @override
   bool operator ==(Object other) {
     return other is Pet && other.petStats == petStats &&
-        other.hasPooped == hasPooped && other.petIsSick == petIsSick;
+        other.hasPooped == hasPooped && other.petIsSick == petIsSick &&
+        timeBorn.compareTo(other.timeBorn) == 0;
   }
 
   @override
@@ -124,6 +129,12 @@ class Pet {
       print("Reading failed");
       return Pet();
     }
+  }
+
+  int ageInMinutes() {
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(timeBorn);
+    return difference.inMinutes;
   }
 
 
