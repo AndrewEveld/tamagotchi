@@ -106,7 +106,7 @@ class _ScreenState extends State<Screen> {
       "sleep" : sleep,
       "bathe" : bath,
       "heal" : heal,
-      "info" : goToInfo
+      "info" : doNothing
     };
     List<Coordinate> initialCoords = new List<Coordinate>();
     List<bool> initialFixed = new List<bool>();
