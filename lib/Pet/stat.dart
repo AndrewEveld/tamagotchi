@@ -98,6 +98,26 @@ class PetStats {
     Duration difference = now.difference(latestInteraction);
     return difference.inMinutes;
   }
+
+  @override
+  bool operator ==(Object other) {
+      return other is PetStats &&
+          other.latestInteraction.compareTo(latestInteraction) == 0 &&
+          other.isSleeping == isSleeping && statsAreSame(other);
+  }
+
+  bool statsAreSame(PetStats other) {
+    for (Stats stats in Stats.values) {
+      if (other is PetStats && other.statsMap[stats] != statsMap[stats]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
+
 }
 
 class Stat {
@@ -152,6 +172,17 @@ class Stat {
     return difference.inMinutes;
 
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Stat && other.value == value &&
+        other.mostRecentTimeChange.compareTo(mostRecentTimeChange) == 0 &&
+        other.stat == stat;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
+
 }
 
 enum Stats {

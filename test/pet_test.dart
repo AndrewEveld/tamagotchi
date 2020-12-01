@@ -1,11 +1,44 @@
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:tamagotchi/Pet/pet.dart';
 import 'package:tamagotchi/Pet/stat.dart';
 
 main() {
+  WidgetsFlutterBinding.ensureInitialized();
   DateTime mostRecentTimeChange = DateTime(1999);
   int value = 8;
+
+  test("Stat == operator should work", () {
+    Stat original = Stat(Stats.hunger);
+    Stat sameAsOriginal = Stat(Stats.hunger);
+    Stat differentThanOriginal = Stat(Stats.energy);
+    sameAsOriginal.mostRecentTimeChange = original.mostRecentTimeChange;
+    expect(original, sameAsOriginal);
+    expect(original, isNot(equals(differentThanOriginal)));
+  });
+
+  test("PetStats == operator should work", () {
+    PetStats original = PetStats();
+    PetStats same = PetStats();
+    PetStats different = PetStats();
+    same.statsMap = original.statsMap;
+    same.latestInteraction = original.latestInteraction;
+    expect(original, same);
+    expect(original, isNot(equals(different)));
+  });
+
+  test("Pet == operator should work", () {
+    Pet original = Pet();
+    Pet same = Pet();
+    Pet different = Pet();
+    same.petStats = original.petStats;
+    expect(original, same);
+    expect(original, isNot(equals(different)));
+  });
 
   test("Encode Stat Works", () {
     Stat toEncode = Stat(Stats.hunger);
@@ -31,8 +64,7 @@ main() {
     String jsonEncoded = jsonEncode(toEncode.toJson());
     Map<String, dynamic> jsonDecoded = jsonDecode(jsonEncoded);
     Stat decoded = Stat.fromJson(jsonDecoded, Stats.hunger);
-    expect(value, decoded.value);
-    expect(mostRecentTimeChange, decoded.mostRecentTimeChange);
+    expect(toEncode, decoded);
   });
 
 
@@ -42,9 +74,7 @@ main() {
     for (Stats stats in Stats.values) {
       Stat expected = petStats.statsMap[stats];
       Stat encodedStat = Stat.fromJson(encoded[stats.toString()], stats);
-      expect(expected.mostRecentTimeChange, encodedStat.mostRecentTimeChange);
-      expect(expected.value, encodedStat.value);
-      expect(expected.stat, encodedStat.stat);
+      expect(expected, encodedStat);
     }
     expect(petStats.isSleeping, encoded['isSleeping']);
     expect(petStats.latestInteraction, DateTime.parse(encoded['latestInteraction']));
@@ -56,14 +86,49 @@ main() {
     String jsonEncoded = jsonEncode(encoded);
     Map<String, dynamic> decoded = jsonDecode(jsonEncoded);
     PetStats decodedPetStats = PetStats.fromJson(decoded);
-    for (Stats stats in Stats.values) {
-      Stat expected = petStats.statsMap[stats];
-      Stat decodedStat = decodedPetStats.statsMap[stats];
-      expect(expected.mostRecentTimeChange, decodedStat.mostRecentTimeChange);
-      expect(expected.stat, decodedStat.stat);
-      expect(expected.value, decodedStat.value);
-    }
-    expect(petStats.isSleeping, decodedPetStats.isSleeping);
-    expect(petStats.latestInteraction, decodedPetStats.latestInteraction);
+    expect(petStats, decodedPetStats);
   });
+
+  test("Encode Pet works", () {
+    Pet toEncode = Pet();
+    Map<String, dynamic> encoded = toEncode.toJson();
+    expect(toEncode.petStats, PetStats.fromJson(encoded['petStats']));
+    expect(toEncode.hasPooped, encoded['hasPooped']);
+    expect(toEncode.petIsSick, encoded['petIsSick']);
+  });
+
+  test("Encode to json String and decoding from json string should work", () {
+    Pet toEncode = Pet();
+    Map<String, dynamic> encoded = toEncode.toJson();
+    String encodedString = jsonEncode(encoded);
+    Map<String, dynamic> decoded = jsonDecode(encodedString);
+    Pet decodedPet = Pet.fromJson(decoded);
+    expect(toEncode, decodedPet);
+  });
+
+  test("changStatByAmount Should Work", () {
+    Stat stat = Stat(Stats.hunger);
+    int expectedValue = stat.value + 2;
+    stat.changeStatByAmount(2);
+    expect(expectedValue, stat.value);
+  });
+
+  test("Writing and reading json files work", () async {
+    Pet petToWrite = Pet();
+    await petToWrite.writeJsonToFile();
+    Pet petToRead = await petToWrite.readData();
+    expect(petToWrite, petToRead);
+  });
+
+  setUpAll(() async {
+    final directory = await Directory.systemTemp.createTemp();
+    const MethodChannel('plugins.flutter.io/path_provider')
+        .setMockMethodCallHandler((MethodCall methodCall) async {
+      if (methodCall.method == 'getApplicationDocumentsDirectory') {
+        return directory.path;
+      }
+      return null;
+    });
+  });
+
 }

@@ -1,5 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
-
+import 'package:path_provider/path_provider.dart';
 import 'stat.dart';
 
 class Pet {
@@ -30,6 +32,7 @@ class Pet {
   void refreshPet() {
     petStats.refreshStats();
     tryPoop();
+    writeJsonToFile();
   }
 
   void eat(int foodValue) {
@@ -77,5 +80,48 @@ class Pet {
   cleanPoop() {
     hasPooped = false;
   }
+
+  @override
+  bool operator ==(Object other) {
+    return other is Pet && other.petStats == petStats &&
+        other.hasPooped == hasPooped && other.petIsSick == petIsSick;
+  }
+
+  @override
+  int get hashCode => super.hashCode;
+
+  String _filename = "Pet";
+  Future<String> get _localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/$_filename.json');
+  }
+
+  Future<void> writeJsonToFile() async {
+    print("writing");
+    final file = await _localFile;
+    await file.writeAsString(jsonEncode(toJson()));
+  }
+
+  Future<Pet> readData() async {
+    try {
+      final file = await _localFile;
+      String contents = await file.readAsString();
+      print(contents);
+      Map<String, dynamic> decoded = jsonDecode(contents);
+      Pet fromMemory = Pet.fromJson(decoded);
+      print("reading successful");
+      return fromMemory;
+    }
+    catch (e) {
+      print("Reading failed");
+      return Pet();
+    }
+  }
+
 
 }
